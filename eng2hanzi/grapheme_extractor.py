@@ -17,12 +17,12 @@ class GraphemeExtractor:
         i = 0
         while i < len(text):
             matched = False
-            for g in range(self.max_grapheme_length, 0, -1):
-                grapheme = text[i:i+g]
+            for g in range(self.max_grapheme_length + 1, 0, -1):
+                grapheme = text[i:i+g].lower()
                 if self.is_grapheme(grapheme):
                     graphemes.append(grapheme)
-                    i += len(grapheme)
                     matched = True
+                    i += len(grapheme)
                     break
             if not matched:
                 graphemes.append(text[i])

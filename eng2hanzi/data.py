@@ -1,6 +1,7 @@
 engrapheme_pinyin_transcription = {
     "b": "bu",
     "ba": "ba",
+    "bu": "bu",
     "p": "pu",
     "d": "de",
     "t": "te",
@@ -20,4 +21,10 @@ pinyin_hanzi_transcription = {
     "ge": ["格"],
     "ke": ["克"],
     "fu": ["夫", "弗"]
+}
+
+stable_hanzi_map = {
+    "babu": "爸部",
+    "cocacola": "可口可乐",
+    "coca cola": "可口可乐"
 }
