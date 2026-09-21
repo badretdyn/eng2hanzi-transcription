@@ -12,7 +12,7 @@ class GraphemeExtractor:
     def is_grapheme(self, gr : str) -> bool:
         return gr in self.graphemes
 
-    def get_graphemes(self, text : str) -> list[str]:
+    def extract_graphemes(self, text : str) -> list[str]:
         graphemes = []
         i = 0
         while i < len(text):
