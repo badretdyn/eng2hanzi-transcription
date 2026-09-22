@@ -1,9 +1,9 @@
-from eng2hanzi.eng_hanzi_transcriber import EngHanziTranscriber
-from eng2hanzi.data import engrapheme_pinyin_transcription
-from eng2hanzi.data import pinyin_hanzi_transcription
-from eng2hanzi.data import stable_hanzi_map
+from hanzi_transcriber.eng_hanzi_transcriber import EngHanziTranscriber
+from hanzi_transcriber.data import engrapheme_pinyin_transcription
+from hanzi_transcriber.data import pinyin_hanzi_transcription
+from hanzi_transcriber.data import stable_hanzi_map
 
-class Tests:
+class Test:
     @staticmethod
     def transcriber_test():
         transcriber = EngHanziTranscriber(engrapheme_pinyin_transcription, pinyin_hanzi_transcription, stable_hanzi_map)
@@ -43,6 +43,6 @@ if __name__ == '__main__':
     user_input = input('test=')
     match user_input:
         case '1':
-            Tests.transcriber_test()
+            Test.transcriber_test()
         case '2':
-            Tests.grex_test()
+            Test.grex_test()

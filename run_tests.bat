@@ -5,6 +5,6 @@
 
 @REM  cd /d "%~dp0"
 
-python -m tests.tests_model
+python -m tests.test_model
 
 pause
