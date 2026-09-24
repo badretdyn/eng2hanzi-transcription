@@ -6,8 +6,10 @@ from hanzi_transcriber.data import stable_hanzi_map
 from hanzi_transcriber.transcriber import HanziTranscriber
 from hanzi_transcriber.tables.en import en_table
 from hanzi_transcriber.hanzi_model import *
-from hanzi_transcriber.tables.en import EN_TO_HANZI, VARIANTS
+from hanzi_transcriber.tables.en import EN_READING_TO_HANZI_VARIANTS, HANZI
 from hanzi_transcriber.segment_extractor import SegmentExtractor
+
+import logging
 
 class Test:
     @staticmethod
@@ -55,11 +57,11 @@ class Test:
 
     @staticmethod
     def tables():
-        tr = HanziTranscriber(EN_TO_HANZI, VARIANTS)
-        se = SegmentExtractor(EN_TO_HANZI)
+        tr = HanziTranscriber(EN_READING_TO_HANZI_VARIANTS, HANZI)
+        se = SegmentExtractor(EN_READING_TO_HANZI_VARIANTS)
         text = "  li ri  liri   LiRi Type Ali Lia  "
-        splited = se.get_words(text)
-        joined = se.join(splited)
+        splited = se.split_words(text)
+        joined = se.join_tokens(splited)
         words = tr.transcribe_tokens(splited)
         print(f"text: {text!r}")
         print(f"splited: {splited!r}")
@@ -67,7 +69,19 @@ class Test:
         print(f"text == joined: {text == joined!r}")
         print(f"words: {words}")
 
+    @staticmethod
+    def seex():
+        se = SegmentExtractor(set(EN_READING_TO_HANZI_VARIANTS))
+        segments = se.segment_word("alirib")
+        print(segments)
+
 if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s %(levelname)s %(name)s: %(message)s',
+        datefmt='%H:%M:%S'
+    )
+
     user_input = input('test=')
     match user_input:
         case '1':
@@ -78,3 +92,5 @@ if __name__ == '__main__':
             Test.equals()
         case '4':
             Test.tables()
+        case '5':
+            Test.seex()

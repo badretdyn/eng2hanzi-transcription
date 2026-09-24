@@ -1,12 +1,12 @@
 from ..hanzi_model import Hanzi
 from ..hanzi_tag import HanziTag
 
-EN_TO_HANZI = {
+EN_READING_TO_HANZI_VARIANTS = {
     "li": ["利", "莉"],
     "ri": ["里", "丽"]
 }
 
-VARIANTS = {
+HANZI = {
     "利": Hanzi("利", "lì"),
     "莉": Hanzi("莉", "lì", frozenset({HanziTag.FEMALE})),
     "里": Hanzi("里", "lì"),

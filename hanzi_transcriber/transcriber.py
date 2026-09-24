@@ -1,19 +1,13 @@
 from .hanzi_model import Hanzi
 
 class HanziTranscriber:
-    def __init__(self, transcription_table, variants):
+    def __init__(self, transcription_table, hanzi_table):
         self.transcription_table = transcription_table
-        self.variants = variants
+        self.hanzi_table = hanzi_table
 
         self._max_syllable_length = None
 
-    @property
-    def max_syllable_length(self):
-        if self._max_syllable_length is None:
-            self._max_syllable_length = max(len(s) for s in self.transcription_table)
-        return self._max_syllable_length
-
-    def get_transcriptions(self, syllable: str) -> Hanzi:
+    def get_transcriptions(self, syllable: str) -> list[str]:
         return self.transcription_table[syllable]
 
     def can_get_transcriptions(self, syllable: str) -> bool:
@@ -58,4 +52,4 @@ class HanziTranscriber:
         pass
 
     def __repr__(self):
-        return f"HanziTranscriber(syllables={self.transcription_table}, variants={self.variants})"
+        return f"HanziTranscriber(syllables={self.transcription_table}, variants={self.hanzi_table})"
