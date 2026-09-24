@@ -1,4 +1,17 @@
 from ..hanzi_model import Hanzi
+from ..hanzi_tag import HanziTag
+
+EN_TO_HANZI = {
+    "li": ["利", "莉"],
+    "ri": ["里", "丽"]
+}
+
+VARIANTS = {
+    "利": Hanzi("利", "lì"),
+    "莉": Hanzi("莉", "lì", frozenset({HanziTag.FEMALE})),
+    "里": Hanzi("里", "lì"),
+    "丽": Hanzi("丽", "lì", frozenset({HanziTag.FEMALE})),
+}
 
 en_table = {
     "b":    [Hanzi("布", "bù")],
