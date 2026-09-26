@@ -17,8 +17,11 @@ class SegmentExtractor:
     def split_words(self, text: str):
         return text.split(" ")
 
-    def join_tokens(self, tokens: list[str]):
-        return " ".join(tokens)
+    def join_words(self, words: list[str]):
+        return " ".join(words)
+
+    def join_tokens(self, tokens):
+        return " ".join("".join(sub) for sub in tokens)
 
     def segment_word(self, word: str) -> list[str]:
         known_segments = self.segments

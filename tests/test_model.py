@@ -61,7 +61,7 @@ class Test:
         se = SegmentExtractor(EN_READING_TO_HANZI_VARIANTS)
         text = "  li ri  liri   LiRi Type Ali Lia  "
         splited = se.split_words(text)
-        joined = se.join_tokens(splited)
+        joined = se.join_words(splited)
         words = tr.transcribe_tokens(splited)
         print(f"text: {text!r}")
         print(f"splited: {splited!r}")
@@ -83,15 +83,15 @@ class Test:
         print(f"tokens: {tokens!r}")
         tr = HanziTranscriber(EN_READING_TO_HANZI_VARIANTS, HANZI, COMBINATIONS)
         print(tr.get_transcriptions("cocacola"))
-        transcribed = tr.transcribe_words(tokens)
+        transcribed = tr.transcribe_words(tokens, True)
         print(f"transcribed: {transcribed!r}")
         joined_transcribed = se.join_tokens(transcribed)
         print(f"joined trasncribed: {joined_transcribed!r}")
 
     @staticmethod
-    def transcriber():
+    def hz_variants():
         tr = HanziTranscriber(EN_READING_TO_HANZI_VARIANTS, HANZI, COMBINATIONS)
-        token = tr.transcribe_word(["li", "ri"])
+        token = tr.transcribe_word(["v", "a", "li", "v"], True)
         print(f"token: {token}")
 
 if __name__ == '__main__':
@@ -114,4 +114,4 @@ if __name__ == '__main__':
         case '5':
             Test.seex()
         case '6':
-            Test.transcriber()
+            Test.hz_variants()
