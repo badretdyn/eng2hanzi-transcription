@@ -13,6 +13,10 @@ HANZI = {
     "丽": Hanzi("丽", "lì", frozenset({HanziTag.FEMALE})),
 }
 
+COMBINATIONS = {
+    "cocacola": ["可口可乐"]
+}
+
 en_table = {
     "b":    [Hanzi("布", "bù")],
     "ba":   [Hanzi("巴", "bā")],

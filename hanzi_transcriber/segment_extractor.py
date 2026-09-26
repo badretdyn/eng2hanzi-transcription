@@ -3,8 +3,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 class SegmentExtractor:
-    def __init__(self, segments: set[str]):
+    def __init__(self, segments: set[str], combinations: set[str]):
         self.segments = segments
+        self.combinations = combinations
         self._max_segment_length = None
         
     @property
@@ -24,29 +25,28 @@ class SegmentExtractor:
         segments = []
 
         logger.debug("segments: %r", known_segments)
-        print(f"se.tw\tkeys:{known_segments!r}")
-        print(f"se.tw\tword:{word!r}")
+        logger.debug("word: %r", word)
 
         unknown_start = 0
 
         seg_start_i = 0
         while seg_start_i < len(word):
-            print(f'se.tw\twhile {seg_start_i} < {len(word)}')
+            logger.debug("while %r < %r", seg_start_i, len(word))
 
             for seg_len in range(min(len(word) - seg_start_i, self.max_segment_length), 0, -1):
-                print(f'se.tw\t\tfor {seg_len}')
-                candidate = word[seg_start_i:seg_start_i+seg_len]
+                logger.debug("\tfor %r", seg_len)
+                candidate = word[seg_start_i:seg_start_i+seg_len].lower()
 
-                print(f"se.tw\t\t\t{seg_start_i}:{seg_start_i+seg_len}")
-                print(f"se.tw\t\t\tchunk: {candidate}")
+                logger.debug("\t\tcandidate i: %r:%r", seg_start_i, seg_start_i + seg_len)
+                logger.debug("\t\tcandidate: %r", candidate)
 
                 if candidate in known_segments:
-                    print(f'se.tw\t\t\t{candidate} is in keys')
+                    logger.debug("\t\t%r is in known_segments", candidate)
 
                     if unknown_start < seg_start_i:
                         segments.append(word[unknown_start:seg_start_i])
 
-                    print(f'se.tw\t\t\tundef: {unknown_start}:{seg_start_i}')
+                    logger.debug("\t\tunder: %r:%r", unknown_start, seg_start_i)
                     segments.append(candidate)
 
                     seg_start_i += seg_len
@@ -61,10 +61,27 @@ class SegmentExtractor:
         return segments
 
     def segment_words(self, words):
-        # TODO: uses tokenize_word for every word from method get_words
         result = []
-        for word in words:
-            result.extend(self.segment_word(word))
+
+        i = 0
+        while i < len(words):
+            j = i + 1
+            next_word = ''
+            while j < len(words):
+                if not words[j] == '':
+                    next_word = words[j]
+                    break
+                j += 1
+            pair = words[i] + next_word
+
+            if words[i] == '':
+                result.append([''])
+            elif pair in self.combinations:
+                result.append([pair])
+                i = j
+            else:
+                result.append(self.segment_word(words[i]))
+            i += 1
         return result
 
     def __repr__(self):

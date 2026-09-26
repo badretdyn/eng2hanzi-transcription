@@ -6,7 +6,7 @@ from hanzi_transcriber.data import stable_hanzi_map
 from hanzi_transcriber.transcriber import HanziTranscriber
 from hanzi_transcriber.tables.en import en_table
 from hanzi_transcriber.hanzi_model import *
-from hanzi_transcriber.tables.en import EN_READING_TO_HANZI_VARIANTS, HANZI
+from hanzi_transcriber.tables.en import EN_READING_TO_HANZI_VARIANTS, HANZI, COMBINATIONS
 from hanzi_transcriber.segment_extractor import SegmentExtractor
 
 import logging
@@ -71,13 +71,32 @@ class Test:
 
     @staticmethod
     def seex():
-        se = SegmentExtractor(set(EN_READING_TO_HANZI_VARIANTS))
-        segments = se.segment_word("alirib")
+        se = SegmentExtractor(set(EN_READING_TO_HANZI_VARIANTS), set(COMBINATIONS))
+        segments = se.segment_word("_liri_LIRI_")
         print(segments)
+
+        text = "TypeA liRiB coca  cola  cocacola"
+        print(f"text: {text!r}")
+        words = se.split_words(text)
+        print(f"words: {words!r}")
+        tokens = se.segment_words(words)
+        print(f"tokens: {tokens!r}")
+        tr = HanziTranscriber(EN_READING_TO_HANZI_VARIANTS, HANZI, COMBINATIONS)
+        print(tr.get_transcriptions("cocacola"))
+        transcribed = tr.transcribe_words(tokens)
+        print(f"transcribed: {transcribed!r}")
+        joined_transcribed = se.join_tokens(transcribed)
+        print(f"joined trasncribed: {joined_transcribed!r}")
+
+    @staticmethod
+    def transcriber():
+        tr = HanziTranscriber(EN_READING_TO_HANZI_VARIANTS, HANZI, COMBINATIONS)
+        token = tr.transcribe_word(["li", "ri"])
+        print(f"token: {token}")
 
 if __name__ == '__main__':
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.WARNING,
         format='%(asctime)s %(levelname)s %(name)s: %(message)s',
         datefmt='%H:%M:%S'
     )
@@ -94,3 +113,5 @@ if __name__ == '__main__':
             Test.tables()
         case '5':
             Test.seex()
+        case '6':
+            Test.transcriber()
