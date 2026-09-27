@@ -22,4 +22,24 @@ MANUAL_TRANSCRIPTIONS = {
     "ba bu": "八不"
 }
 
-ALL_SEGMENTS = SEGMENTS_TO_HANZI_VARIANTS
+NULL_INITIAL_SEGMENTS = {
+    "a":        ["阿"],
+    "e":        ["埃"],
+    "eo":       ["厄"],
+    "i":        ["伊"],
+    "o":        ["奥"],
+    "u":        ["乌"],
+    "yu":       ["尤"],
+    "ai":       ["艾"],
+    "ao":       ["奥"],
+    "an":       ["安"],
+    "ang":      ["昂"],
+    "en":       ["恩"],
+    "eng":      ["鞥"],
+    "in":       ["因"],
+    "ing":      ["英"],
+    "un":       ["温"],
+    "ung":      ["翁"]
+}
+
+ALL_SEGMENTS = SEGMENTS_TO_HANZI_VARIANTS | NULL_INITIAL_SEGMENTS
