@@ -3,26 +3,37 @@ import logging
 logger = logging.getLogger(__name__)
 
 class SegmentExtractor:
-    def __init__(self, segments: set[str]):
+    def __init__(self, segments: set[str], manual_transcriptions: set[str]):
         self.segments = segments
+        self.manual_transcriptions = manual_transcriptions
         self._max_segment_length = None
+        self._max_compound_length = None
         
     @property
     def max_segment_length(self) -> int:
         if self._max_segment_length is None:
             self._max_segment_length = max(len(key) for key in self.segments)
         return self._max_segment_length
+
+    @property
+    def max_compound_length(self) -> int:
+        if self._max_compound_length is None:
+            self._max_compound_length = max(len(key.split(" ")) for key in self.manual_transcriptions)
+        return self._max_compound_length
     
-    def split_words(self, text: str):
+    def split_to_words(self, text: str) -> list[str]:
+        # TODO: have to split by all whitespace characters (\n, \t) and save it
+        # when joining back just replace ' \n ' with '\n'?
         return text.split(" ")
 
     def join_words(self, words: list[str]):
         return " ".join(words)
 
-    def join_tokens(self, tokens):
+    def join_tokens(self, tokens: list[list[str]]):
         return " ".join("".join(sub) for sub in tokens)
 
-    def segment_word(self, word: str) -> list[str]:
+    def tokenize_word(self, word: str) -> list[str]:
+        """Splits a word to tokens in list. Tokens can be transcribable and not."""
         known_segments = self.segments
         segments = []
 
@@ -62,28 +73,42 @@ class SegmentExtractor:
 
         return segments
 
-    def segment_words(self, words: list[str]) -> list[list[str]]:
+    def tokenize_words(self, words: list[str]) -> list[list[str]]:
+        """Splits every word to token list that transcribable and not, finds compound words and unite it in one word as one token"""
         result = []
-
+        
         i = 0
         while i < len(words):
-            j = i + 1
-            next_word = ''
-            while j < len(words):
-                if not words[j] == '':
-                    next_word = words[j]
-                    break
-                j += 1
-            pair = words[i] + next_word
+            logger.debug("t_ws\twhile %r < %r", i, len(words))
 
-            if words[i] == '':
-                result.append([''])
-            elif pair in self.segments:
-                result.append([pair])
-                i = j
+            compound = words[i]
+
+            word_count_in_compound = 1
+            j = i + 1
+            while j < len(words) and word_count_in_compound < self.max_compound_length:
+                logger.debug("t_ws\t\twhile %r < %r and %r < %r", j, len(words), word_count_in_compound, self.max_compound_length)
+
+                next_word = words[j]
+                logger.debug("t_ws\t\t\tnext_word: %r", next_word)
+
+                compound += ' ' + next_word
+                logger.debug("t_ws\t\t\tcompound: %r", compound)
+
+                word_count_in_compound += 1
+                j += 1
+                if compound in self.manual_transcriptions:
+                    result.append([compound])
+                    i = j
+                    break
             else:
-                result.append(self.segment_word(words[i]))
-            i += 1
+                if words[i] == '':
+                    result.append([''])
+                elif compound in self.manual_transcriptions:
+                    result.append([compound])
+                    i = j
+                else:
+                    result.append(self.tokenize_word(words[i]))
+                i += 1
         return result
 
     def __repr__(self):

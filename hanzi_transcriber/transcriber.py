@@ -4,54 +4,60 @@ import logging
 logger = logging.getLogger(__name__)
 
 class HanziTranscriber:
-    def __init__(self, transcription_table, hanzi_table):
+    def __init__(self, transcription_table, hanzi_table, manual_transcriptions):
         self.transcription_table = transcription_table
         self.hanzi_table = hanzi_table
+        self.manual_transcriptions = manual_transcriptions
 
-        self._max_syllable_length = None
-
-    def get_transcriptions(self, syllable: str) -> list[str]:
+    def get_hanzi_variants(self, syllable: str) -> list[str]:
         return self.transcription_table[syllable]
 
-    def can_get_transcriptions(self, syllable: str) -> bool:
+    def has_hanzi_variants(self, syllable: str) -> bool:
         return syllable in self.transcription_table
 
     def get_hanzi(self, hanzi: str) -> Hanzi:
         return self.hanzi_table[hanzi]
 
-    def can_get_hanzi(self, hanzi: str) -> bool:
-        return hanzi in self.transcription_table
+    def has_hanzi(self, hanzi: str) -> bool:
+        return hanzi in self.hanzi_table
 
-    def is_female_variant(self, hanzi: str) -> bool:
+    def get_manual(self, manual: str) -> str:
+        return self.manual_transcriptions[manual]
+
+    def has_manual(self, manual: str) -> bool:
+        return manual in self.manual_transcriptions
+
+    def has_female_tag(self, hanzi: str) -> bool:
         hanzi_instance = self.get_hanzi(hanzi)
         return HanziTag.FEMALE in hanzi_instance.tags
 
-    def is_start_variant(self, hanzi: str) -> bool:
-            hanzi_instance = self.get_hanzi(hanzi)
-            return HanziTag.START in hanzi_instance.tags
+    def has_start_tag(self, hanzi: str) -> bool:
+        hanzi_instance = self.get_hanzi(hanzi)
+        return HanziTag.START in hanzi_instance.tags
 
-    def is_end_variant(self, hanzi: str) -> bool:
-            hanzi_instance = self.get_hanzi(hanzi)
-            return HanziTag.END in hanzi_instance.tags
+    def has_end_tag(self, hanzi: str) -> bool:
+        hanzi_instance = self.get_hanzi(hanzi)
+        return HanziTag.END in hanzi_instance.tags
         
 
-    def transcribe_word(self, word: list[str], is_female: bool = False) -> list[str]:
+    def transcribe_token(self, token: list[str], is_female: bool = False) -> list[str]:
         result = []
-        for i, token in enumerate(word):
+        for i, token in enumerate(token):
             logger.debug("token: %r", token)
-            if self.can_get_transcriptions(token):
-                # TODO: choosing variant logic here, at least variants of begining and ending of a word
-                # for now it always chooses first variant
-                variants = self.get_transcriptions(token)
+            if self.has_manual(token):
+                result.append(self.get_manual(token))
+                continue
+            if self.has_hanzi_variants(token):
+                variants = self.get_hanzi_variants(token)
                 for v in variants:
                     try:
-                        if i == 0 and self.is_start_variant(v):
+                        if i == 0 and self.has_start_tag(v):
                             result.append(v)
                             break
-                        elif i == len(word) - 1 and self.is_end_variant(v):
+                        elif i == len(token) - 1 and self.has_end_tag(v):
                             result.append(v)
                             break
-                        if is_female and self.is_female_variant(v):
+                        if is_female and self.has_female_tag(v):
                             result.append(v)
                             break
                     except KeyError as e: pass
@@ -61,11 +67,11 @@ class HanziTranscriber:
                 result.append(token)
         return result
 
-    def transcribe_words(self, words: list[list[str]], is_female: bool = False):
+    def transcribe_tokens(self, tokens: list[list[str]], is_female: bool = False):
         result = []
-        for word in words:
-            logger.debug("word: %r", word)
-            result.append(self.transcribe_word(word, is_female))
+        for token in tokens:
+            logger.debug("word: %r", token)
+            result.append(self.transcribe_token(token, is_female))
         return result
 
     def __repr__(self):

@@ -1,13 +1,13 @@
 from ..hanzi_model import Hanzi
 from ..hanzi_tag import HanziTag
 
-EN_READING_TO_HANZI_VARIANTS = {
+SEGMENTS_TO_HANZI_VARIANTS = {
     "li": ["利", "莉"],
     "ri": ["里", "丽"],
     "v": ["夫", "弗"]
 }
 
-HANZI = {
+HANZI_BY_CHAR = {
     "利": Hanzi("利", "lì"),
     "莉": Hanzi("莉", "lì", frozenset({HanziTag.FEMALE})),
     "里": Hanzi("里", "lì"),
@@ -16,8 +16,10 @@ HANZI = {
     "弗": Hanzi("弗", "fú", frozenset({HanziTag.START}))
 }
 
-COMBINATIONS = {
-    "cocacola": ["可口可乐"]
+MANUAL_TRANSCRIPTIONS = {
+    "coca cola": "可口可乐",
+    "babu": "八不",
+    "ba bu": "八不"
 }
 
-ALL_SETS = EN_READING_TO_HANZI_VARIANTS | COMBINATIONS
+ALL_SEGMENTS = SEGMENTS_TO_HANZI_VARIANTS

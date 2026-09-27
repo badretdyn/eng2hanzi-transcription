@@ -1,6 +1,6 @@
 from hanzi_transcriber.transcriber import HanziTranscriber
 from hanzi_transcriber.hanzi_model import *
-from hanzi_transcriber.tables.en import EN_READING_TO_HANZI_VARIANTS, HANZI, COMBINATIONS, ALL_SETS
+from hanzi_transcriber.tables.en import HANZI_BY_CHAR, ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS
 from hanzi_transcriber.segment_extractor import SegmentExtractor
 
 import logging
@@ -16,28 +16,28 @@ class Test:
 
     @staticmethod
     def seex():
-        se = SegmentExtractor(set(ALL_SETS))
-        tr = HanziTranscriber(ALL_SETS, HANZI)
-        segments = se.segment_word("_liri_LIRI_")
+        se = SegmentExtractor(set(ALL_SEGMENTS), set(MANUAL_TRANSCRIPTIONS))
+        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        segments = se.tokenize_word("_liri_LIRI_")
         print(f"segments: {segments}")
-        print(f"transcribed segments: {tr.transcribe_word(segments, True)}")
+        print(f"transcribed segments: {tr.transcribe_token(segments, True)}")
 
-        text = "TypeA liRiB coca  cola  cocacola"
+        text = "TypeA liRiB coca  cola  cocacola coca cola ba bu babu bab u"
         print(f"text: {text!r}")
-        words = se.split_words(text)
+        words = se.split_to_words(text)
         print(f"words: {words!r}")
-        tokens = se.segment_words(words)
+        tokens = se.tokenize_words(words)
         print(f"tokens: {tokens!r}")
-        print(f"cocacola: {tr.get_transcriptions("cocacola")}")
-        transcribed = tr.transcribe_words(tokens, True)
+        #print(f"cocacola: {tr.get_hanzi_variants("cocacola")}")
+        transcribed = tr.transcribe_tokens(tokens, True)
         print(f"transcribed: {transcribed!r}")
         joined_transcribed = se.join_tokens(transcribed)
         print(f"joined trasncribed: {joined_transcribed!r}")
 
     @staticmethod
     def hz_variants():
-        tr = HanziTranscriber(ALL_SETS, HANZI)
-        token = tr.transcribe_word(["v", "a", "li", "v"], True)
+        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        token = tr.transcribe_token(["v", "a", "li", "v"], True)
         print(f"token: {token}")
 
 if __name__ == '__main__':
