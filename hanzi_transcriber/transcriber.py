@@ -4,10 +4,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 class HanziTranscriber:
-    def __init__(self, transcription_table, hanzi_table, combinations):
-        self.transcription_table = transcription_table | combinations
+    def __init__(self, transcription_table, hanzi_table):
+        self.transcription_table = transcription_table
         self.hanzi_table = hanzi_table
-        #self.combinations = combinations
 
         self._max_syllable_length = None
 

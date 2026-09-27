@@ -3,9 +3,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 class SegmentExtractor:
-    def __init__(self, segments: set[str], combinations: set[str]):
+    def __init__(self, segments: set[str]):
         self.segments = segments
-        self.combinations = combinations
         self._max_segment_length = None
         
     @property
@@ -63,7 +62,7 @@ class SegmentExtractor:
 
         return segments
 
-    def segment_words(self, words):
+    def segment_words(self, words: list[str]) -> list[list[str]]:
         result = []
 
         i = 0
@@ -79,7 +78,7 @@ class SegmentExtractor:
 
             if words[i] == '':
                 result.append([''])
-            elif pair in self.combinations:
+            elif pair in self.segments:
                 result.append([pair])
                 i = j
             else:

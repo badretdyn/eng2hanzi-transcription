@@ -1,5 +1,6 @@
 from .transcriber import HanziTranscriber
 from .hanzi_model import Hanzi
-from .tables.en import en_table
+from .hanzi_tag import HanziTag
+from .tables.en import ALL_SETS
 
-__all__ = ["HanziTranscriber", "Hanzi", "en_table"]
+__all__ = ["HanziTranscriber", "Hanzi", "HanziTag", "ALL_SETS"]
