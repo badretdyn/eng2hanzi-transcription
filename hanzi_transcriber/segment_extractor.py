@@ -22,18 +22,21 @@ class SegmentExtractor:
         return self._max_compound_length
     
     def split_to_words(self, text: str) -> list[str]:
+        """Word is a string. List of words is strings separated by spaces. Saves sonsecutive spaces so does not trims string."""
         # TODO: have to split by all whitespace characters (\n, \t) and save it
         # when joining back just replace ' \n ' with '\n'?
         return text.split(" ")
 
-    def join_words(self, words: list[str]):
+    def join_words(self, words: list[str]) -> str:
+        """Joins list of words by spaces."""
         return " ".join(words)
 
-    def join_tokens(self, tokens: list[list[str]]):
+    def join_tokens(self, tokens: list[list[str]]) -> str:
+        """Joins list of string lists. Between tokens spaces, between segments empty string."""
         return " ".join("".join(sub) for sub in tokens)
 
     def tokenize_word(self, word: str) -> list[str]:
-        """Splits a word to tokens in list. Tokens can be transcribable and not."""
+        """Converts word to token: splits a string to list of segments. Segments can be transcribable and not."""
         known_segments = self.segments
         segments = []
 
@@ -74,8 +77,8 @@ class SegmentExtractor:
         return segments
 
     def tokenize_words(self, words: list[str]) -> list[list[str]]:
-        """Splits every word to token list that transcribable and not, finds compound words and unite it in one word as one token"""
-        result = []
+        """Splits every word to token and returns list of tokens. Checks neighboring words for compound word and unite it in one list with one segment"""
+        tokens = []
         
         i = 0
         while i < len(words):
@@ -97,19 +100,19 @@ class SegmentExtractor:
                 word_count_in_compound += 1
                 j += 1
                 if compound in self.manual_transcriptions:
-                    result.append([compound])
+                    tokens.append([compound])
                     i = j
                     break
             else:
                 if words[i] == '':
-                    result.append([''])
+                    tokens.append([''])
                 elif compound in self.manual_transcriptions:
-                    result.append([compound])
+                    tokens.append([compound])
                     i = j
                 else:
-                    result.append(self.tokenize_word(words[i]))
+                    tokens.append(self.tokenize_word(words[i]))
                 i += 1
-        return result
+        return tokens
 
     def __repr__(self):
         return f"SegmentExtractor(segments: {self.segments!r})"

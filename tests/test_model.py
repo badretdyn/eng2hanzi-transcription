@@ -34,6 +34,9 @@ class Test:
         joined_transcribed = se.join_tokens(transcribed)
         print(f"joined trasncribed: {joined_transcribed!r}")
 
+        tr_text = tr.transcribe_text(text, True)
+        print(f"{joined_transcribed} == {tr_text}: {joined_transcribed == tr_text}")
+
     @staticmethod
     def hz_variants():
         tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
