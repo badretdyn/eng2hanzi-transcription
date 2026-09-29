@@ -33,6 +33,10 @@ class HanziTranscriber:
     def has_female_tag(self, hanzi: str) -> bool:
         hanzi_instance = self.get_hanzi(hanzi)
         return HanziTag.FEMALE in hanzi_instance.tags
+    
+    def has_male_tag(self, hanzi: str) -> bool:
+        hanzi_instance = self.get_hanzi(hanzi)
+        return HanziTag.MALE in hanzi_instance.tags
 
     def has_start_tag(self, hanzi: str) -> bool:
         hanzi_instance = self.get_hanzi(hanzi)
@@ -79,7 +83,7 @@ class HanziTranscriber:
             transcribed_tokens.append(self.transcribe_token(token, is_female))
         return transcribed_tokens
 
-    def transcribe_text(self, text, is_female = False):
+    def transcribe_text(self, text, is_female = False): #TODO: tags in arguments, not just bool
         words = self._segex.split_to_words(text)
         tokens = self._segex.tokenize_words(words)
         transcribed_tokens = self.transcribe_tokens(tokens, is_female)

@@ -4,3 +4,4 @@ class HanziTag(Enum):
     FEMALE = "female"
     START = "start"
     END = "end"
+    MALE = "male"

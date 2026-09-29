@@ -42,6 +42,13 @@ class Test:
         tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
         token = tr.transcribe_token(["v", "a", "li", "v"], True)
         print(f"token: {token}")
+        se = SegmentExtractor(ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS)
+        words = se.split_to_words("coca-cola babu ba bu babu")
+        tokens = se.tokenize_words(words)
+        transcribed = tr.transcribe_tokens(tokens)
+        print(f"words: {words}")
+        print(f"tokens: {tokens}")
+        print(f"transcribed: {transcribed}")
 
     @staticmethod
     def null_initial():
@@ -50,6 +57,14 @@ class Test:
         token = tr.transcribe_token(["a", "u", "e", "en"], True)
         token_se = tr.transcribe_token(se.tokenize_word("aueen"))
         print(f"{token} == {token_se}: {token == token_se}")
+
+    @staticmethod
+    def input():
+        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        usinp = ''
+        while (usinp != 'exit'):
+            usinp = input()
+            print(tr.transcribe_text(usinp))
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -68,3 +83,5 @@ if __name__ == '__main__':
             Test.hz_variants()
         case '4':
             Test.null_initial()
+        case '5':
+            Test.input()

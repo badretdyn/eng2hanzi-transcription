@@ -39,8 +39,7 @@ class SegmentExtractor:
         """Converts word to token: splits a string to list of segments. Segments can be transcribable and not."""
         known_segments = self.segments
         segments = []
-
-        logger.debug("segments: %r", known_segments)
+        
         logger.debug("word: %r", word)
 
         unknown_start = 0
@@ -109,6 +108,7 @@ class SegmentExtractor:
                 elif compound in self.manual_transcriptions:
                     tokens.append([compound])
                     i = j
+                    continue
                 else:
                     tokens.append(self.tokenize_word(words[i]))
                 i += 1
