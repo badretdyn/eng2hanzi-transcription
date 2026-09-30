@@ -64,7 +64,14 @@ class Test:
         usinp = ''
         while (usinp != 'exit'):
             usinp = input()
-            print(tr.transcribe_text(usinp))
+            words = tr._segex.split_to_words(usinp)
+            tokens = tr._segex.tokenize_words(words)
+            tokens_transcribed = tr.transcribe_tokens(tokens)
+            transcribed_text = tr._segex.join_tokens(tokens_transcribed)
+            print(f"words: {words!r}")
+            print(f"tokens: {tokens!r}")
+            print(f"tokens transcribed: {tokens_transcribed!r}")
+            print(f"transcribed text: {transcribed_text}")            
 
     @staticmethod
     def aliases():
@@ -85,6 +92,11 @@ class Test:
         print(f"text: {text}")
         print(f"words: {words}")
         print(f"tokens: {tokens}")
+
+    @staticmethod
+    def hanzi_check():
+        tr = HanziTranscriber(get_all_segments(), HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        print(tr.get_no_hanzi_info_segments())
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -109,3 +121,5 @@ if __name__ == '__main__':
             Test.aliases()
         case '7':
             Test.gongong_bug()
+        case '8':
+            Test.hanzi_check()

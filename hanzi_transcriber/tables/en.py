@@ -106,12 +106,42 @@ HANZI_BY_CHAR = {
     "京": Hanzi("京", "jīng"),
     "贡": Hanzi("贡", "gòng"),
 
+    "克": Hanzi("克", "kè"),
+    "卡": Hanzi("卡", "kǎ"),
+    "凯": Hanzi("凯", "kǎi"),
+    "基": Hanzi("基", "jī"),
+    "科": Hanzi("科", "kē"),
+    "库": Hanzi("库", "kù"),
+    "丘": Hanzi("丘", "qiū"),
+    "凯": Hanzi("凯", "kǎi"),
+    "考": Hanzi("考", "kǎo"),
+    "坎": Hanzi("坎", "kǎn"),
+    "康": Hanzi("康", "kāng"),
+    "肯": Hanzi("肯", "kěn"),
+    "昆": Hanzi("昆", "kūn"),
+    "孔": Hanzi("孔", "kǒng"),
+    
+    "夫": Hanzi("夫", "fū"),
+    "弗": Hanzi("弗", "fú", frozenset({HanziTag.START})),
+    "瓦": Hanzi("瓦", "wǎ"),
+    "娃": Hanzi("娃", "wá", frozenset({HanziTag.FEMALE})),
+    "韦": Hanzi("韦", "wéi"),
+    "维": Hanzi("维", "wéi"),
+    "沃": Hanzi("沃", "wò"),
+    "武": Hanzi("武", "wǔ"),
+    "维尤": Hanzi("维尤", "wéiyóu"),
+    "万": Hanzi("万", "wàn"),
+    "旺": Hanzi("旺", "wàng"),
+    "文": Hanzi("文", "wén"),
+    "温": Hanzi("温", "wēn"),
+    "翁": Hanzi("翁", "wēng"),
+
     "利": Hanzi("利", "lì"),
     "莉": Hanzi("莉", "lì", frozenset({HanziTag.FEMALE})),
     "里": Hanzi("里", "lì"),
     "丽": Hanzi("丽", "lì", frozenset({HanziTag.FEMALE})),
-    "夫": Hanzi("夫", "fū"),
-    "弗": Hanzi("弗", "fú", frozenset({HanziTag.START}))
+    #"夫": Hanzi("夫", "fū"),
+    #"弗": Hanzi("弗", "fú", frozenset({HanziTag.START}))
 }
 
 MANUAL_TRANSCRIPTIONS = {
@@ -122,12 +152,15 @@ MANUAL_TRANSCRIPTIONS = {
 
 NULL_INITIAL_SEGMENTS = {
     "a":        ["阿"],
+    #"ya":            ["亚"],
     "e":        ["埃"],
+    #"ye":            ["耶"],
     #"ei":       ["埃"],
     "eo":       ["厄"],
     "i":        ["伊"],
+    #"yi":        ["伊"],
     "o":        ["奥"],
-        "uo":        ["乌奥"],
+    "uo":           ["乌奥"],
     "u":        ["乌"],
     "yu":       ["尤"],
     "ai":       ["艾"],
@@ -146,8 +179,10 @@ NULL_INITIAL_SEGMENTS = {
 
 B_INITIAL_SEGMENTS = {
     "b":         ["布"],
+    #"bia":        ["比亚"],
     "ba":        ["巴"],
     "be":        ["贝"],
+    #"bie":        ["比耶"],
     #"bei":       ["贝"],
     "beo":       ["伯"],
     "bi":        ["比"],
@@ -171,7 +206,9 @@ B_INITIAL_SEGMENTS = {
 P_INITIAL_SEGMENTS = {
     "p":         ["普"],
     "pa":        ["帕"],
+    #"pia":        ["皮亚"],
     "pe":        ["佩"],
+    #"pie":        ["皮耶"],
     #"pei":       ["佩"],
     "peo":       ["珀"],
     "pi":        ["皮"],
@@ -195,7 +232,9 @@ P_INITIAL_SEGMENTS = {
 D_INITIAL_SEGMENTS = {
     "d":        ["德"],
     "da":        ["达"],
+    #"dia":        ["迪亚"],
     "de":        ["德"],
+    #"die":        ["迪耶"],
     #"dei":       ["德"],
     "deo":       ["德"],
     "di":        ["迪"],
@@ -219,7 +258,9 @@ D_INITIAL_SEGMENTS = {
 T_INITIAL_SEGMENTS = {
     "t":         ["特"],
     "ta":        ["塔"],
+    #"tia":        ["蒂亚"],
     "te":        ["特"],
+    #"tie":        ["蒂耶"],
     #"tei":       ["特"],
     "teo":       ["特"],
     "ti":        ["蒂"],
@@ -243,7 +284,9 @@ T_INITIAL_SEGMENTS = {
 G_INITIAL_SEGMENTS = {
     "g":        ["格"],
     "ga":       ["加"],
+    #"gia":       ["吉亚"],
     "ge":       ["盖"],
+    #"gie":       ["吉耶"],
     "geo":      ["格"],
     "gi":       ["吉"],
     "go":       ["戈"],
@@ -261,13 +304,59 @@ G_INITIAL_SEGMENTS = {
     "gung":     ["贡"],
 }
 
+K_INITIAL_SEGMENTS = {
+    "k":         ["克"],
+    "ka":        ["卡"],
+    #"kia":        ["基亚"],
+    "ke":        ["凯"],
+    #"kie":        ["基耶"],
+    "keo":       ["克"],
+    "ki":        ["基"],
+    "ko":        ["科"],
+    "kuo":          ["库奥"],
+    "ku":        ["库"],
+    "kiu":       ["丘"],
+    "kai":       ["凯"],
+    "kao":       ["考"],
+    "kan":       ["坎"],
+    "kang":      ["康"],
+    "ken":       ["肯"],
+    "kin":       ["金"],
+    "king":      ["金"],
+    "kun":       ["昆"],
+    "kung":      ["孔"]
+}
+
+V_INITIAL_SEGMENTS = {
+    "v":        ["夫", "弗"],
+    "va":       ["瓦", "娃"],
+    #"via":       ["维亚"],
+    "ve":       ["韦"],
+    #"vie":       ["维耶"],
+    "veo":      ["弗"],
+    "vi":       ["维"],
+    "vo":       ["沃"],
+    "vu":       ["武"],
+    "viu":      ["维尤"],
+    "vai":      ["韦"],
+    "vao":      ["沃"],
+    "van":      ["万"],
+    "vang":     ["旺"],
+    "ven":      ["文"],
+    "vin":      ["温"],
+    "ving":     ["温"],
+    "vun":      ["文"],
+    "vung":     ["翁"]
+}
+
 # alias: existing
 _FINAL_ALIASES = {
     "ei": "e",
     "on": "un",
     "ong": "ung",
     "uo": "o",
-    "eng": "en"
+    "eng": "en",
+    #"io": "iu"
 }
 
 _TABLE_LIST = [
@@ -276,7 +365,9 @@ _TABLE_LIST = [
     ('p', P_INITIAL_SEGMENTS),
     ('d', D_INITIAL_SEGMENTS),
     ('t', T_INITIAL_SEGMENTS),
-    ('g', G_INITIAL_SEGMENTS)
+    ('g', G_INITIAL_SEGMENTS),
+    ('k', K_INITIAL_SEGMENTS),
+    ('v', V_INITIAL_SEGMENTS)
 ]
 
 def _build_tables(table_list, final_aliases):
@@ -299,7 +390,7 @@ def _build_tables(table_list, final_aliases):
                 if segment_wo_init == existing_final:
                     #initial = segment.replace(existing_final, '')
                     value = table[1][segment]
-                    print(f"\t\t\tsegment: {segment!r}, value: {value!r}")
+                    #print(f"\t\t\tsegment: {segment!r}, value: {value!r}")
                     
                     new_segment = initial + alias_final
                     #print(f"\t\t\tnew segment: {new_segment!r}")
@@ -319,7 +410,7 @@ def _build_tables(table_list, final_aliases):
                 #print(f"\t\t{new_segment!r} is in the table already. continue")
                 continue
 
-            print(f"\t\tTABLE_LIST[{i}][{new_segment!r}] = {value!r}")
+            #print(f"\t\tTABLE_LIST[{i}][{new_segment!r}] = {value!r}")
             table_list[i][1][new_segment] = value
 
     all_segments = dict()

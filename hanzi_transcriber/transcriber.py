@@ -18,10 +18,10 @@ class HanziTranscriber:
     def has_hanzi_variants(self, segment: str) -> bool:
         return segment in self.segments
 
-    def get_hanzi(self, hanzi: str) -> Hanzi:
+    def get_hanzi_info(self, hanzi: str) -> Hanzi:
         return self.hanzi_table[hanzi]
 
-    def has_hanzi(self, hanzi: str) -> bool:
+    def has_hanzi_info(self, hanzi: str) -> bool:
         return hanzi in self.hanzi_table
 
     def get_manual(self, segment: str) -> str:
@@ -31,26 +31,37 @@ class HanziTranscriber:
         return segment in self.manual_transcriptions
 
     def has_female_tag(self, hanzi: str) -> bool:
-        hanzi_instance = self.get_hanzi(hanzi)
+        hanzi_instance = self.get_hanzi_info(hanzi)
         return HanziTag.FEMALE in hanzi_instance.tags
     
     def has_male_tag(self, hanzi: str) -> bool:
-        hanzi_instance = self.get_hanzi(hanzi)
+        hanzi_instance = self.get_hanzi_info(hanzi)
         return HanziTag.MALE in hanzi_instance.tags
 
     def has_start_tag(self, hanzi: str) -> bool:
-        hanzi_instance = self.get_hanzi(hanzi)
+        hanzi_instance = self.get_hanzi_info(hanzi)
         return HanziTag.START in hanzi_instance.tags
 
     def has_end_tag(self, hanzi: str) -> bool:
-        hanzi_instance = self.get_hanzi(hanzi)
+        hanzi_instance = self.get_hanzi_info(hanzi)
         return HanziTag.END in hanzi_instance.tags
-        
+
+    def get_no_hanzi_info_segments(self):
+        segments_no_info = []
+        for segment in self.segments:
+            variants = self.get_hanzi_variants(segment)
+            for v in variants:
+                if self.has_hanzi_info(v):
+                    continue
+                segments_no_info.append(v)
+        return segments_no_info
 
     def transcribe_token(self, token: list[str], is_female: bool = False) -> list[str]:
         transcription_token = []
         for i, segment in enumerate(token):
             logger.debug("token: %r", segment)
+            if segment == '\'':
+                continue
             if self.has_manual(segment):
                 transcription_token.append(self.get_manual(segment))
                 continue
