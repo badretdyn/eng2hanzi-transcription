@@ -1,6 +1,6 @@
 from hanzi_transcriber.transcriber import HanziTranscriber
 from hanzi_transcriber.hanzi_model import *
-from hanzi_transcriber.tables.en import HANZI_BY_CHAR, ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS
+from hanzi_transcriber.tables.en import HANZI_BY_CHAR, ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS, TABLE_LIST
 from hanzi_transcriber.segment_extractor import SegmentExtractor
 
 import logging
@@ -66,6 +66,10 @@ class Test:
             usinp = input()
             print(tr.transcribe_text(usinp))
 
+    @staticmethod
+    def aliases():
+        print(TABLE_LIST)
+
 if __name__ == '__main__':
     logging.basicConfig(
         level=logging.WARNING,
@@ -85,3 +89,5 @@ if __name__ == '__main__':
             Test.null_initial()
         case '5':
             Test.input()
+        case '6':
+            Test.aliases()
