@@ -88,7 +88,23 @@ HANZI_BY_CHAR = {
     "滕": Hanzi("滕", "téng"),
     "廷": Hanzi("廷", "tíng"),
     "通": Hanzi("通", "tōng"),
-    
+
+    "格": Hanzi("格", "gé"),
+    "加": Hanzi("加", "jiā"),
+    "盖": Hanzi("盖", "gài"),
+    "吉": Hanzi("吉", "jí"),
+    "戈": Hanzi("戈", "gē"),
+    "果": Hanzi("果", "guǒ"),
+    "古": Hanzi("古", "gǔ"),
+    "久": Hanzi("久", "jiǔ"),
+    "盖": Hanzi("盖", "gài"),
+    "高": Hanzi("高", "gāo"),
+    "甘": Hanzi("甘", "gān"),
+    "冈": Hanzi("冈", "gāng"),
+    "根": Hanzi("根", "gēn"),
+    "金": Hanzi("金", "jīn"),
+    "京": Hanzi("京", "jīng"),
+    "贡": Hanzi("贡", "gòng"),
 
     "利": Hanzi("利", "lì"),
     "莉": Hanzi("莉", "lì", frozenset({HanziTag.FEMALE})),
@@ -111,6 +127,7 @@ NULL_INITIAL_SEGMENTS = {
     "eo":       ["厄"],
     "i":        ["伊"],
     "o":        ["奥"],
+        "uo":        ["乌奥"],
     "u":        ["乌"],
     "yu":       ["尤"],
     "ai":       ["艾"],
@@ -223,8 +240,29 @@ T_INITIAL_SEGMENTS = {
     #"tong":      ["通"]
 }
 
+G_INITIAL_SEGMENTS = {
+    "g":        ["格"],
+    "ga":       ["加"],
+    "ge":       ["盖"],
+    "geo":      ["格"],
+    "gi":       ["吉"],
+    "go":       ["戈"],
+    "guo":          ["果"],
+    "gu":       ["古"],
+    "giu":      ["久"],
+    "gai":      ["盖"],
+    "gao":      ["高"],
+    "gan":      ["甘"],
+    "gang":     ["冈"],
+    "gen":      ["根"],
+    "gin":      ["金"],
+    "ging":     ["京"],
+    "gun":      ["贡"],
+    "gung":     ["贡"],
+}
+
 # alias: existing
-FINAL_ALIASES = {
+_FINAL_ALIASES = {
     "ei": "e",
     "on": "un",
     "ong": "ung",
@@ -232,57 +270,79 @@ FINAL_ALIASES = {
     "eng": "en"
 }
 
-TABLE_LIST = [
+_TABLE_LIST = [
     ('', NULL_INITIAL_SEGMENTS),
     ('b', B_INITIAL_SEGMENTS),
     ('p', P_INITIAL_SEGMENTS),
     ('d', D_INITIAL_SEGMENTS),
-    ('t', T_INITIAL_SEGMENTS)
+    ('t', T_INITIAL_SEGMENTS),
+    ('g', G_INITIAL_SEGMENTS)
 ]
 
-for i, table in enumerate(TABLE_LIST[:]):
-    print(f"for table: {table}")
-    for alias_final in FINAL_ALIASES:
-        print(f"\tfor alias: {alias_final!r}")
-        
-        existing_final = FINAL_ALIASES[alias_final]
-        print(f"\t\texisting final: {existing_final!r}")
-        
-        initial = table[0]
-        value = ''
-        new_segment = ''
-        
-        for segment in table[1]:
-            print(f"\t\tfor segment: {segment!r}")
+def _build_tables(table_list, final_aliases):
+    for i, table in enumerate(table_list[:]):
+        #print(f"for table: {table}")
+        for alias_final in final_aliases:
+            #print(f"\tfor alias: {alias_final!r}")
             
-            if segment.endswith(existing_final):
-                #initial = segment.replace(existing_final, '')
-                value = table[1][segment]
-                print(f"\t\t\tinitial: {initial!r}, value: {value!r}. break")
-                
-                new_segment = initial + alias_final
-                print(f"\t\t\tnew segment: {new_segment!r}")
-                
-                if new_segment.replace(initial, "") != alias_final:
-                    print(f"\t\t\t{new_segment} is not ends on {alias_final}")
-                    continue
-                break
-        else:
-            print(f"\t\t\tno segment.endswith({existing_final!r})")
-            continue
+            existing_final = final_aliases[alias_final]
+            #print(f"\t\texisting final: {existing_final!r}")
             
-        if new_segment in table[1]:
-            print(f"\t\t{new_segment!r} is in the table already. continue")
-            continue
+            initial = table[0]
+            value = ''
+            new_segment = ''
+            
+            for segment in table[1]:
+                #print(f"\t\tfor segment: {segment!r}")
+                
+                segment_wo_init = segment.replace(initial, "", 1)
+                if segment_wo_init == existing_final:
+                    #initial = segment.replace(existing_final, '')
+                    value = table[1][segment]
+                    print(f"\t\t\tsegment: {segment!r}, value: {value!r}")
+                    
+                    new_segment = initial + alias_final
+                    #print(f"\t\t\tnew segment: {new_segment!r}")
 
-        print(f"\t\tTABLE_LIST[{i}][{new_segment!r}] = {value!r}")
-        TABLE_LIST[i][1][new_segment] = value
+                    #print(f"\t\t\t{new_segment.replace(initial, "", 1)} != {alias_final}")
+                    if new_segment.replace(initial, "", 1) != alias_final:
+                        #print(f"\t\t\t{new_segment!r} is not ends on {alias_final!r}. continue")
+                        continue
 
-ALL_SEGMENTS = (
-    SEGMENTS_TO_HANZI_VARIANTS
-    | NULL_INITIAL_SEGMENTS
-    | B_INITIAL_SEGMENTS
-    | P_INITIAL_SEGMENTS
-    | D_INITIAL_SEGMENTS
-    | T_INITIAL_SEGMENTS
-    )
+                    #print("\t\t\tbreak")
+                    break
+            else:
+                #print(f"\t\t\tno segment.endswith({existing_final!r})")
+                continue
+                
+            if new_segment in table[1]:
+                #print(f"\t\t{new_segment!r} is in the table already. continue")
+                continue
+
+            print(f"\t\tTABLE_LIST[{i}][{new_segment!r}] = {value!r}")
+            table_list[i][1][new_segment] = value
+
+    all_segments = dict()
+    for t in table_list:
+        all_segments = all_segments | t[1]
+
+    return all_segments
+
+_ALL_SEGMENTS = None
+
+def get_all_segments():
+    global _ALL_SEGMENTS
+    if _ALL_SEGMENTS is None:
+        _ALL_SEGMENTS = _build_tables(_TABLE_LIST, _FINAL_ALIASES)
+
+        # all_segments = (
+        #     SEGMENTS_TO_HANZI_VARIANTS
+        #     | NULL_INITIAL_SEGMENTS
+        #     | B_INITIAL_SEGMENTS
+        #     | P_INITIAL_SEGMENTS
+        #     | D_INITIAL_SEGMENTS
+        #     | T_INITIAL_SEGMENTS
+        #     | G_INITIAL_SEGMENTS
+        #     )
+
+    return _ALL_SEGMENTS

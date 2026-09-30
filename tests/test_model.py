@@ -1,6 +1,6 @@
 from hanzi_transcriber.transcriber import HanziTranscriber
 from hanzi_transcriber.hanzi_model import *
-from hanzi_transcriber.tables.en import HANZI_BY_CHAR, ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS, TABLE_LIST
+from hanzi_transcriber.tables.en import HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS, _TABLE_LIST, get_all_segments
 from hanzi_transcriber.segment_extractor import SegmentExtractor
 
 import logging
@@ -16,8 +16,8 @@ class Test:
 
     @staticmethod
     def seex():
-        se = SegmentExtractor(set(ALL_SEGMENTS), set(MANUAL_TRANSCRIPTIONS))
-        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        se = SegmentExtractor(set(get_all_segments()), set(MANUAL_TRANSCRIPTIONS))
+        tr = HanziTranscriber(get_all_segments(), HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
         segments = se.tokenize_word("_liri_LIRI_")
         print(f"segments: {segments}")
         print(f"transcribed segments: {tr.transcribe_token(segments, True)}")
@@ -39,10 +39,10 @@ class Test:
 
     @staticmethod
     def hz_variants():
-        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        tr = HanziTranscriber(get_all_segments(), HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
         token = tr.transcribe_token(["v", "a", "li", "v"], True)
         print(f"token: {token}")
-        se = SegmentExtractor(ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS)
+        se = SegmentExtractor(get_all_segments(), MANUAL_TRANSCRIPTIONS)
         words = se.split_to_words("coca-cola babu ba bu babu")
         tokens = se.tokenize_words(words)
         transcribed = tr.transcribe_tokens(tokens)
@@ -52,15 +52,15 @@ class Test:
 
     @staticmethod
     def null_initial():
-        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
-        se = SegmentExtractor(ALL_SEGMENTS, MANUAL_TRANSCRIPTIONS)
+        tr = HanziTranscriber(get_all_segments(), HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        se = SegmentExtractor(get_all_segments(), MANUAL_TRANSCRIPTIONS)
         token = tr.transcribe_token(["a", "u", "e", "en"], True)
         token_se = tr.transcribe_token(se.tokenize_word("aueen"))
         print(f"{token} == {token_se}: {token == token_se}")
 
     @staticmethod
     def input():
-        tr = HanziTranscriber(ALL_SEGMENTS, HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        tr = HanziTranscriber(get_all_segments(), HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
         usinp = ''
         while (usinp != 'exit'):
             usinp = input()
@@ -68,10 +68,23 @@ class Test:
 
     @staticmethod
     def aliases():
-        for t in TABLE_LIST:
+
+        get_all_segments()
+        
+        for t in _TABLE_LIST:
             for s in t[1]:
                 print(s)
             print()
+
+    @staticmethod
+    def gongong_bug():
+        tr = HanziTranscriber(get_all_segments(), HANZI_BY_CHAR, MANUAL_TRANSCRIPTIONS)
+        text = "gongong"
+        words = tr._segex.split_to_words(text)
+        tokens = tr._segex.tokenize_words(words)
+        print(f"text: {text}")
+        print(f"words: {words}")
+        print(f"tokens: {tokens}")
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -94,3 +107,5 @@ if __name__ == '__main__':
             Test.input()
         case '6':
             Test.aliases()
+        case '7':
+            Test.gongong_bug()
