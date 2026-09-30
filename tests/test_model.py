@@ -68,7 +68,10 @@ class Test:
 
     @staticmethod
     def aliases():
-        print(TABLE_LIST)
+        for t in TABLE_LIST:
+            for s in t[1]:
+                print(s)
+            print()
 
 if __name__ == '__main__':
     logging.basicConfig(

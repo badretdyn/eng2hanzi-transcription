@@ -48,7 +48,6 @@ HANZI_BY_CHAR = {
     "珀": Hanzi("珀", "pò"),
     "皮": Hanzi("皮", "pí"),
     "波": Hanzi("波", "bō"),
-    "普": Hanzi("普", "pǔ"),
     "皮尤": Hanzi("皮尤", "píyóu"),
     "派": Hanzi("派", "pài"),
     "保": Hanzi("保", "bǎo"),
@@ -108,7 +107,7 @@ MANUAL_TRANSCRIPTIONS = {
 NULL_INITIAL_SEGMENTS = {
     "a":        ["阿"],
     "e":        ["埃"],
-    "ei":       ["埃"],
+    #"ei":       ["埃"],
     "eo":       ["厄"],
     "i":        ["伊"],
     "o":        ["奥"],
@@ -119,20 +118,20 @@ NULL_INITIAL_SEGMENTS = {
     "an":       ["安"],
     "ang":      ["昂"],
     "en":       ["恩"],
-    "eng":      ["恩"],
+    #"eng":      ["恩"],
     "in":       ["因"],
     "ing":      ["英"],
     "un":       ["温"],
     "ung":      ["翁"],
-    "on":       ["温"],
-    "ong":      ["翁"]
+    #"on":       ["温"],
+    #"ong":      ["翁"]
 }
 
 B_INITIAL_SEGMENTS = {
     "b":         ["布"],
     "ba":        ["巴"],
     "be":        ["贝"],
-    "bei":       ["贝"],
+    #"bei":       ["贝"],
     "beo":       ["伯"],
     "bi":        ["比"],
     "bo":        ["博"],
@@ -143,20 +142,20 @@ B_INITIAL_SEGMENTS = {
     "ban":       ["班"],
     "bang":      ["邦"],
     "ben":       ["本"],
-    "beng":      ["本"],
+    #"beng":      ["本"],
     "bin":       ["宾"],
     "bing":      ["宾"],
     "bun":       ["本"],
     "bung":      ["邦"],
-    "bon":       ["本"],
-    "bong":      ["邦"]
+    #"bon":       ["本"],
+    #"bong":      ["邦"]
 }
 
 P_INITIAL_SEGMENTS = {
     "p":         ["普"],
     "pa":        ["帕"],
     "pe":        ["佩"],
-    "pei":       ["佩"],
+    #"pei":       ["佩"],
     "peo":       ["珀"],
     "pi":        ["皮"],
     "po":        ["波"],
@@ -167,20 +166,20 @@ P_INITIAL_SEGMENTS = {
     "pan":       ["潘"],
     "pang":      ["庞"],
     "pen":       ["彭"],
-    "peng":      ["彭"],
+    #"peng":      ["彭"],
     "pin":       ["平"],
     "ping":      ["平"],
     "pun":       ["蓬"],
     "pung":      ["蓬"],
-    "pon":       ["蓬"], 
-    "pong":      ["蓬"]
+    #"pon":       ["蓬"], 
+    #"pong":      ["蓬"]
 }
 
 D_INITIAL_SEGMENTS = {
     "d":        ["德"],
     "da":        ["达"],
     "de":        ["德"],
-    "dei":       ["德"],
+    #"dei":       ["德"],
     "deo":       ["德"],
     "di":        ["迪"],
     "do":        ["多"],
@@ -191,20 +190,20 @@ D_INITIAL_SEGMENTS = {
     "dan":       ["丹"],
     "dang":      ["当"],
     "den":       ["登"],
-    "deng":      ["登"],
+    #"deng":      ["登"],
     "din":       ["丁"],
     "ding":      ["丁"],
     "dun":       ["敦"],
     "dung":      ["东"],
-    "don":       ["敦"],
-    "dong":      ["东"]
+    #"don":       ["敦"],
+    #"dong":      ["东"]
 }
 
 T_INITIAL_SEGMENTS = {
     "t":         ["特"],
     "ta":        ["塔"],
     "te":        ["特"],
-    "tei":       ["特"],
+    #"tei":       ["特"],
     "teo":       ["特"],
     "ti":        ["蒂"],
     "to":        ["托"],
@@ -215,24 +214,13 @@ T_INITIAL_SEGMENTS = {
     "tan":       ["坦"],
     "tang":      ["唐"],
     "ten":       ["滕"],
-    "teng":      ["滕"],
+    #"teng":      ["滕"],
     "tin":       ["廷"],
     "ting":      ["廷"],
     "tun":       ["通"],
     "tung":      ["通"],
-    "ton":       ["通"],
-    "tong":      ["通"]
-}
-
-TEST_INITIAL_TABLE = {
-    "qe": ["QE"],
-    "qei": ["QEI"],
-    "qo": ["QO"],
-    "qi": ["QI"],
-}
-
-TEST_INITIAL_TABLE2 = {
-    "zhe": ["ZHE"],
+    #"ton":       ["通"],
+    #"tong":      ["通"]
 }
 
 # alias: existing
@@ -245,47 +233,55 @@ FINAL_ALIASES = {
 }
 
 TABLE_LIST = [
-    # NULL_INITIAL_SEGMENTS,
-    # B_INITIAL_SEGMENTS,
-    # P_INITIAL_SEGMENTS,
-    # P_INITIAL_SEGMENTS,
-    # D_INITIAL_SEGMENTS,
-    # T_INITIAL_SEGMENTS,
-    TEST_INITIAL_TABLE,
-    TEST_INITIAL_TABLE2
+    ('', NULL_INITIAL_SEGMENTS),
+    ('b', B_INITIAL_SEGMENTS),
+    ('p', P_INITIAL_SEGMENTS),
+    ('d', D_INITIAL_SEGMENTS),
+    ('t', T_INITIAL_SEGMENTS)
 ]
 
 for i, table in enumerate(TABLE_LIST[:]):
     print(f"for table: {table}")
     for alias_final in FINAL_ALIASES:
         print(f"\tfor alias: {alias_final!r}")
-        if alias_final in table:
-            print(f"\t\t{alias_final!r} is in the table. continue")
-            continue
+        
         existing_final = FINAL_ALIASES[alias_final]
         print(f"\t\texisting final: {existing_final!r}")
-        initial = ''
+        
+        initial = table[0]
         value = ''
-        for segment in table:
+        new_segment = ''
+        
+        for segment in table[1]:
             print(f"\t\tfor segment: {segment!r}")
+            
             if segment.endswith(existing_final):
-                initial = segment.replace(existing_final, '')
-                value = table[segment]
+                #initial = segment.replace(existing_final, '')
+                value = table[1][segment]
                 print(f"\t\t\tinitial: {initial!r}, value: {value!r}. break")
+                
+                new_segment = initial + alias_final
+                print(f"\t\t\tnew segment: {new_segment!r}")
+                
+                if new_segment.replace(initial, "") != alias_final:
+                    print(f"\t\t\t{new_segment} is not ends on {alias_final}")
+                    continue
                 break
         else:
             print(f"\t\t\tno segment.endswith({existing_final!r})")
             continue
-        new_segment = initial + alias_final
-        print(f"\t\tnew segment: {new_segment!r}")
+            
+        if new_segment in table[1]:
+            print(f"\t\t{new_segment!r} is in the table already. continue")
+            continue
+
         print(f"\t\tTABLE_LIST[{i}][{new_segment!r}] = {value!r}")
-        TABLE_LIST[i][new_segment] = value
+        TABLE_LIST[i][1][new_segment] = value
 
 ALL_SEGMENTS = (
     SEGMENTS_TO_HANZI_VARIANTS
     | NULL_INITIAL_SEGMENTS
     | B_INITIAL_SEGMENTS
-    | P_INITIAL_SEGMENTS
     | P_INITIAL_SEGMENTS
     | D_INITIAL_SEGMENTS
     | T_INITIAL_SEGMENTS
