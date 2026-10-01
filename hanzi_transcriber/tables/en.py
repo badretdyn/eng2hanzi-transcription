@@ -136,6 +136,37 @@ HANZI_BY_CHAR = {
     "温": Hanzi("温", "wēn"),
     "翁": Hanzi("翁", "wēng"),
 
+    "威": Hanzi("威", "wēi"),
+    "威尤": Hanzi("威尤", "wēiyóu"),
+    "伍": Hanzi("伍", "wǔ"),
+    "怀": Hanzi("怀", "huái"),
+    
+    "法": Hanzi("法", "fǎ"),
+    "费": Hanzi("费", "fèi"),
+    "菲": Hanzi("菲", "fēi"),
+    "福": Hanzi("福", "fú"),
+    "富": Hanzi("富", "fù"),
+    "菲尤": Hanzi("菲尤", "fēiyóu"),
+    "凡": Hanzi("凡", "fán"),
+    "方": Hanzi("方", "fāng"),
+    "芬": Hanzi("芬", "fēn"),
+    "丰": Hanzi("丰", "fēng"),
+
+    "兹": Hanzi("兹", "zī"),
+    "扎": Hanzi("扎", "zhā"),
+    "泽": Hanzi("泽", "zé"),
+    "齐": Hanzi("齐", "qí"),
+    "佐": Hanzi("佐", "zuǒ"),
+    "祖": Hanzi("祖", "zǔ"),
+    "宰": Hanzi("宰", "zǎi"),
+    "藻": Hanzi("藻", "zǎo"),
+    "赞": Hanzi("赞", "zàn"),
+    "藏": Hanzi("藏", "zàng"),
+    "曾": Hanzi("曾", "zēng"),
+    "津": Hanzi("津", "jīn"),
+    "尊": Hanzi("尊", "zūn"),
+    "宗": Hanzi("宗", "zōng"),
+
     "利": Hanzi("利", "lì"),
     "莉": Hanzi("莉", "lì", frozenset({HanziTag.FEMALE})),
     "里": Hanzi("里", "lì"),
@@ -349,6 +380,66 @@ V_INITIAL_SEGMENTS = {
     "vung":     ["翁"]
 }
 
+W_INITIAL_SEGMENTS = {
+    "w":        ["夫", "弗"],
+    "wa":       ["瓦", "娃"],
+    "we":       ["韦"],
+    "weo":      ["沃"],
+    "wi":       ["威"],
+    "wo":       ["沃"],
+    "wu":       ["伍"],
+    "wiu":      ["威尤"],
+    "wai":      ["怀"],
+    "wao":      ["沃"],
+    "wan":      ["万"],
+    "wang":     ["旺"],
+    "wen":      ["文"],
+    "win":      ["温"],
+    "wing":     ["温"],
+    "wun":      ["文"],
+    "wung":     ["翁"]
+}
+
+F_INITIAL_SEGMENTS = {
+    "f":        ["夫", "弗"],
+    "fa":       ["法", "娃"],
+    "fe":       ["费"],
+    "feo":      ["弗"],
+    "fi":       ["菲"],
+    "fo":       ["福"],
+    "fu":       ["富"],
+    "fiu":      ["菲尤"],
+    "fai":      ["法"],
+    "fao":      ["福"],
+    "fan":      ["凡"],
+    "fang":     ["方"],
+    "fen":      ["芬"],
+    "fin":      ["芬"],
+    "fing":     ["温"],
+    "fun":      ["丰"],
+    "fung":     ["丰"]
+}
+
+Z_INITIAL_SEGMENTS = {
+    "z":        ["兹"],
+    "za":       ["扎"],
+    "ze":       ["泽"],
+    "zeo":      ["泽"],
+    "zi":       ["齐"],
+    "zo":       ["佐"],
+    "zu":       ["祖"],
+    "ziu":      ["久"],
+    "zai":      ["宰"],
+    "zao":      ["藻"],
+    "zan":      ["赞"],
+    "zang":     ["藏"],
+    "zen":      ["曾"],
+    "zin":      ["津"],
+    "zing":     ["京"],
+    "zun":      ["尊"],
+    "zung":     ["宗"]
+}
+
 # alias: existing
 _FINAL_ALIASES = {
     "ei": "e",
@@ -356,7 +447,13 @@ _FINAL_ALIASES = {
     "ong": "ung",
     "uo": "o",
     "eng": "en",
-    #"io": "iu"
+    #"io": "iu",
+    "au": "ao"
+}
+
+_INITIAL_ALIASES = {
+    "z": ["dz"],
+    "k": ["c"] # TODO: create separate table for C initial
 }
 
 _TABLE_LIST = [
@@ -367,10 +464,13 @@ _TABLE_LIST = [
     ('t', T_INITIAL_SEGMENTS),
     ('g', G_INITIAL_SEGMENTS),
     ('k', K_INITIAL_SEGMENTS),
-    ('v', V_INITIAL_SEGMENTS)
+    ('v', V_INITIAL_SEGMENTS),
+    ('w', W_INITIAL_SEGMENTS),
+    ('f', F_INITIAL_SEGMENTS),
+    ('z', Z_INITIAL_SEGMENTS)
 ]
 
-def _build_tables(table_list, final_aliases):
+def _build_tables(table_list, final_aliases, initial_aliases):
     for i, table in enumerate(table_list[:]):
         #print(f"for table: {table}")
         for alias_final in final_aliases:
@@ -413,18 +513,46 @@ def _build_tables(table_list, final_aliases):
             #print(f"\t\tTABLE_LIST[{i}][{new_segment!r}] = {value!r}")
             table_list[i][1][new_segment] = value
 
+    initial_alias_segments = dict()
+    for t in table_list:
+        print("for t in table_list")
+
+        initial = t[0]
+        table = t[1]
+        print(f"\tinitial: {initial}")
+
+        aliases = None
+        try: aliases = initial_aliases[initial]
+        except Exception: continue
+
+        print(f"\taliases: {aliases}")
+
+        for alias in aliases:
+            print(f"\tfor {alias} in {aliases}")
+
+            for segment in table:
+                print(f"\t\tfor {segment} in table")
+
+                new_segment = alias + segment.replace(initial, '')
+                value = table[segment]
+                print(f"\t\tnew_segment: {new_segment}, value: {value}")
+
+                initial_alias_segments[new_segment] = value
+
+    print(initial_alias_segments)
+
     all_segments = dict()
     for t in table_list:
         all_segments = all_segments | t[1]
 
-    return all_segments
+    return  initial_alias_segments | all_segments
 
 _ALL_SEGMENTS = None
 
 def get_all_segments():
     global _ALL_SEGMENTS
     if _ALL_SEGMENTS is None:
-        _ALL_SEGMENTS = _build_tables(_TABLE_LIST, _FINAL_ALIASES)
+        _ALL_SEGMENTS = _build_tables(_TABLE_LIST, _FINAL_ALIASES, _INITIAL_ALIASES)
 
         # all_segments = (
         #     SEGMENTS_TO_HANZI_VARIANTS
